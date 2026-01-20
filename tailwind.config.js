@@ -2,32 +2,41 @@
 export default {
   content: [
     "./index.html",
-    "./**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
       },
       colors: {
-        primary: '#207CFF',
-        primaryDark: '#1a63cc',
-        secondary: '#0f172a',
-        accent: '#38bdf8',
+        primary: {
+          DEFAULT: '#0066FF',
+          dark: '#0052CC',
+          light: '#3385FF',
+        },
+        slate: {
+          850: '#151e32',
+          900: '#0f172a',
+        }
+      },
+      boxShadow: {
+        'glow': '0 0 40px -10px rgba(0, 102, 255, 0.3)',
+        'card': '0 10px 40px -10px rgba(0,0,0,0.08)',
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-out',
-        'fade-in-up': 'fadeInUp 0.5s ease-out',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+        'float': 'float 6s ease-in-out infinite',
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
         fadeInUp: {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
         }
       }
     },
