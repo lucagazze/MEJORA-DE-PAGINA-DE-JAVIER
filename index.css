@@ -96,15 +96,16 @@ img, video {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1.5rem; /* Adjusted for mobile */
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem; /* Adjusted for mobile */
   border-radius: var(--radius-lg);
   font-weight: 700;
-  font-size: 1rem; /* Slightly smaller for mobile fit */
+  font-size: 0.95rem; /* Slightly smaller for mobile fit */
   transition: all 0.3s ease;
   text-decoration: none;
   white-space: nowrap; /* Prevent text wrapping */
   width: 100%; /* Full width on mobile */
+  letter-spacing: -0.01em;
 }
 
 @media (min-width: 640px) {
@@ -112,18 +113,20 @@ img, video {
     width: auto; /* Auto width on desktop */
     font-size: 1.125rem;
     padding: 1rem 2rem;
+    gap: 0.75rem;
   }
 }
 
 .btn-primary {
   background-color: var(--primary);
   color: var(--white);
-  box-shadow: 0 10px 20px -5px rgba(0, 102, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
 }
 
 .btn-primary:hover {
   background-color: var(--primary-dark);
   transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 102, 255, 0.4);
 }
 
 .btn-secondary {
@@ -242,7 +245,7 @@ img, video {
 }
 
 .hero-subtitle {
-  font-size: 1.05rem; /* Readable on mobile */
+  font-size: 1rem; /* Readable on mobile */
   color: var(--slate-600);
   max-width: 650px;
   margin: 0 auto 2.5rem;
@@ -312,8 +315,8 @@ img, video {
 }
 
 .profile-img-container {
-  width: 180px; /* Smaller on mobile */
-  height: 180px;
+  width: 160px; /* Smaller on mobile */
+  height: 160px;
   border-radius: 50%;
   overflow: hidden;
   border: 6px solid var(--white);
@@ -336,9 +339,9 @@ img, video {
 }
 
 .divider-small {
-  width: 60px;
-  height: 6px;
-  background-color: var(--slate-100);
+  width: 50px;
+  height: 4px;
+  background-color: var(--slate-200);
   border-radius: var(--radius-full);
   margin: 1rem auto;
 }
@@ -358,8 +361,8 @@ img, video {
 }
 
 .intro-text p {
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 0.95rem; /* Elegant for reading */
+  line-height: 1.7;
   color: var(--slate-600);
   margin-bottom: 1.25rem;
 }
@@ -367,7 +370,7 @@ img, video {
 @media (min-width: 768px) {
   .intro-text p {
     font-size: 1.125rem;
-    line-height: 1.7;
+    line-height: 1.8;
     margin-bottom: 1.5rem;
   }
 }
@@ -385,7 +388,7 @@ img, video {
   color: var(--white);
   padding: 1.5rem;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 30px -5px rgba(0, 102, 255, 0.3);
   position: relative;
   overflow: hidden;
   margin-bottom: 1.5rem;
@@ -413,7 +416,7 @@ img, video {
   gap: 0.5rem;
   color: var(--primary);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-decoration: none;
   text-align: left;
   line-height: 1.3;
@@ -495,7 +498,7 @@ img, video {
   border: 1px solid var(--slate-100);
   border-radius: var(--radius-xl);
   padding: 1.25rem; /* Tighter padding for mobile */
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -628,7 +631,7 @@ img, video {
   background: var(--white);
   padding: 1.75rem; /* Reduced padding */
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
   border-left: 4px solid var(--red-500);
 }
 
@@ -794,12 +797,13 @@ img, video {
 .form-input {
   width: 100%;
   padding: 0.875rem;
-  background-color: var(--slate-50);
+  background-color: #ffffff;
   border: 1px solid var(--slate-200);
   border-radius: 0.75rem;
   font-size: 1rem;
   transition: 0.2s;
   outline: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 @media (min-width: 768px) {
@@ -811,7 +815,7 @@ img, video {
 .form-input:focus {
   background-color: var(--white);
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
 }
 
 .radio-group {
@@ -837,10 +841,12 @@ img, video {
   border-radius: 0.75rem;
   cursor: pointer;
   font-size: 0.95rem;
+  transition: all 0.2s;
 }
 
 .radio-option:hover {
   border-color: var(--primary);
+  background-color: var(--slate-50);
 }
 
 .btn-submit {
@@ -927,7 +933,7 @@ img, video {
 /* Sticky CTA */
 .sticky-cta-wrapper {
   position: fixed;
-  bottom: 1rem;
+  bottom: 1.25rem;
   left: 1rem;
   right: 1rem;
   z-index: 100;
@@ -943,8 +949,9 @@ img, video {
   padding: 1rem;
   border-radius: 1rem;
   font-size: 1rem;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
   white-space: nowrap;
+  backdrop-filter: blur(10px);
 }
 
 /* Animations */
