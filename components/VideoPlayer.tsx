@@ -123,8 +123,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, poster }) => {
 
             {/* Play Button - Centered */}
             <div className="absolute inset-0 z-10 flex items-center justify-center">
-               <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-[0_0_30px_rgba(0,0,0,0.3)] transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:border-primary">
-                  <Play size={28} className="text-white ml-1 fill-white" />
+               <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition-all duration-300 group-hover:scale-110 group-hover:bg-primary border-4 border-transparent group-hover:border-white/20">
+                  <Play size={32} className="text-slate-900 ml-1 fill-slate-900 group-hover:text-white group-hover:fill-white transition-colors" />
                </div>
             </div>
 
