@@ -10,12 +10,12 @@ interface Props {
 const TestimonialCard: React.FC<Props> = ({ data }) => {
   return (
     <div className="testimonial-card">
-      {/* 
-        The video wrapper forces the aspect ratio.
-        The VideoPlayer inside uses width: 100% height: 100% and object-fit: cover 
-      */}
       <div className="video-wrapper">
-         <VideoPlayer url={data.videoUrl} id={data.id} />
+         <VideoPlayer 
+           url={data.videoUrl} 
+           id={data.id} 
+           poster={data.photoUrl} // Pass the cover image
+         />
       </div>
 
       <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>

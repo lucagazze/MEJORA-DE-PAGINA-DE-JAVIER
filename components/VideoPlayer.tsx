@@ -4,10 +4,11 @@ import { Play, Volume2, VolumeX } from 'lucide-react';
 
 interface VideoPlayerProps {
   url: string;
-  id: string; // ID is required now for the mutex logic
+  id: string;
+  poster?: string;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id, poster }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -28,22 +29,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id }) => {
     }
   };
 
-  // Intersection Observer for Auto-play/Pause on Scroll
+  // Intersection Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // If visible (threshold 0.6), play this video
           setPlayingId(id);
-          setIsLoaded(true); // Trigger load if not loaded
+          setIsLoaded(true);
         } else {
-          // If scrolls out of view AND this was the playing video, stop it
           if (playingId === id) {
             setPlayingId(null);
           }
         }
       },
-      { threshold: 0.65 } // 65% of the video must be visible to start
+      { threshold: 0.65 }
     );
 
     if (containerRef.current) {
@@ -53,28 +52,24 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id }) => {
     return () => observer.disconnect();
   }, [id, playingId, setPlayingId]);
 
-  // Effect to handle Play/Pause based on global context state
+  // Effect to handle Play/Pause
   useEffect(() => {
     if (isImage) return;
 
     if (isPlaying) {
-      // PLAY LOGIC
       if (isVimeo) {
         postToVimeo('play');
         postToVimeo('setVolume', isMuted ? '0' : '1');
       } else if (videoRef.current) {
-        videoRef.current.muted = isMuted; // Mobile needs muted to autoplay
+        videoRef.current.muted = isMuted;
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => {
-            // Auto-play was prevented (usually because not muted or interaction required)
-            // We force mute again to try recovery
             if(videoRef.current) videoRef.current.muted = true;
           });
         }
       }
     } else {
-      // PAUSE LOGIC
       if (isVimeo) {
         postToVimeo('pause');
       } else if (videoRef.current) {
@@ -83,7 +78,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id }) => {
     }
   }, [isPlaying, isVimeo, isMuted, isImage]);
 
-  // Toggle Mute
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMuted(!isMuted);
@@ -94,30 +88,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id }) => {
     }
   };
 
-  // Manual Play Click
   const handleContainerClick = () => {
     if (isPlaying) {
-      setPlayingId(null); // Pause if clicking
+      setPlayingId(null);
     } else {
-      setPlayingId(id); // Play if clicking
-      setIsMuted(false); // Unmute on explicit interaction
+      setPlayingId(id);
+      setIsMuted(false);
     }
   };
 
-  if (isImage) {
-      return (
-        <div className="relative w-full h-full bg-slate-100 rounded-lg overflow-hidden shadow-lg border border-slate-200">
-            <img 
-              src={url} 
-              alt="Testimonio" 
-              className="w-full h-full object-cover" 
-              loading="lazy" 
-            />
-        </div>
-      )
-  }
-
-  // Get optimized Vimeo URL
   const getVimeoUrl = (src: string) => {
     let videoId = '';
     if (src.includes('player.vimeo.com')) {
@@ -126,52 +105,80 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id }) => {
     } else {
       videoId = src.split('/').pop() || '';
     }
-    // API=1 is crucial for postMessage control. Background=1 removes controls for cleaner look (optional)
-    return `https://player.vimeo.com/video/${videoId}?api=1&title=0&byline=0&portrait=0&dnt=1&autopause=0`;
+    return `https://player.vimeo.com/video/${videoId}?api=1&title=0&byline=0&portrait=0&dnt=1&autopause=0&background=1`;
   };
+
+  if (isImage) {
+      return (
+        <div className="relative w-full h-full bg-slate-100 rounded-lg overflow-hidden shadow-lg border border-slate-200">
+            <img src={url} alt="Testimonio" className="w-full h-full object-cover" loading="lazy" />
+        </div>
+      )
+  }
 
   return (
     <div 
       ref={containerRef}
       className="relative w-full h-full bg-slate-900 rounded-lg overflow-hidden shadow-lg border border-slate-200 group cursor-pointer"
       onClick={handleContainerClick}
-      style={{ aspectRatio: '16/9' }}
+      style={{ aspectRatio: '16/9', isolation: 'isolate' }}
     >
-      {isVimeo ? (
-        // Vimeo Player
+      {/* Vimeo Implementation */}
+      {isVimeo && (
         <>
+          {/* Poster Layer (Behind iframe, visible until iframe loads opaque) */}
+          {poster && (
+            <img 
+              src={poster} 
+              alt="Cover"
+              className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+          )}
+
+          {/* Iframe Layer */}
           {isLoaded ? (
             <iframe
               ref={iframeRef}
               src={getVimeoUrl(url)}
-              className="absolute top-0 left-0 w-full h-full"
+              className="absolute inset-0 w-full h-full z-10"
               frameBorder="0"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
               title="Testimonio"
-              style={{ pointerEvents: 'none' }} // Pass clicks to container
+              style={{ pointerEvents: 'none' }}
+              onLoad={() => {
+                // Ensure we trigger play once iframe is ready if logic demands it
+                if (isPlaying) postToVimeo('play');
+              }}
             ></iframe>
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-slate-900">
-               <div className="w-10 h-10 border-4 border-slate-700 border-t-primary rounded-full animate-spin"></div>
-            </div>
+             // Spinner only if no poster is available
+             !poster && (
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-900 z-0">
+                  <div className="w-10 h-10 border-4 border-slate-700 border-t-primary rounded-full animate-spin"></div>
+                </div>
+             )
           )}
         </>
-      ) : (
-        // HTML5 Player
+      )}
+
+      {/* HTML5 Implementation */}
+      {!isVimeo && (
         <video
           ref={videoRef}
           src={url}
-          className="absolute top-0 left-0 w-full h-full object-cover"
+          poster={poster}
+          className="absolute inset-0 w-full h-full object-cover z-10"
           playsInline
           loop
           muted={isMuted}
-          preload="metadata" // Performance optimization
+          preload="metadata"
         ></video>
       )}
 
-      {/* Overlay Controls */}
-      <div className={`absolute inset-0 bg-black/20 transition-opacity duration-300 flex items-center justify-center ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+      {/* Overlay Play Button */}
+      <div className={`absolute inset-0 bg-black/10 z-20 transition-opacity duration-300 flex items-center justify-center ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
         {!isPlaying && (
            <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm transform transition-transform group-hover:scale-110">
               <Play size={24} className="text-primary ml-1" fill="currentColor" />
@@ -179,11 +186,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id }) => {
         )}
       </div>
 
-      {/* Mute Toggle Button (Visible when playing) */}
+      {/* Mute Toggle */}
       {isPlaying && (
         <button 
           onClick={toggleMute}
-          className="absolute bottom-4 right-4 p-2 bg-black/50 text-white rounded-full backdrop-blur-md hover:bg-black/70 transition-colors z-20"
+          className="absolute bottom-4 right-4 p-2 bg-black/50 text-white rounded-full backdrop-blur-md hover:bg-black/70 transition-colors z-30"
         >
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </button>
