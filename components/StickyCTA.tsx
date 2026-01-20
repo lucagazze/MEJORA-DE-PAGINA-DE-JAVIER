@@ -24,28 +24,10 @@ const StickyCTA = () => {
   if (!isVisible) return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: '1rem',
-      left: '1rem',
-      right: '1rem',
-      zIndex: 100,
-      animation: 'fadeInUp 0.5s ease-out'
-    }}>
+    <div className="sticky-cta-wrapper">
       <button
         onClick={scrollToForm}
-        className="btn-primary"
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '0.5rem',
-          padding: '1rem',
-          borderRadius: '1rem',
-          fontSize: '1rem',
-          boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
-        }}
+        className="btn-primary sticky-cta-btn"
       >
         Sí, Necesito Nuevos Pacientes
         <ArrowUpRight size={20} />
