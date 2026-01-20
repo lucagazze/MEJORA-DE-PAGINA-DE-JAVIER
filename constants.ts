@@ -8,8 +8,6 @@ export const IMAGES = {
   placeholder: "https://picsum.photos/600/400"
 };
 
-export const FORM_ENDPOINT = "https://formspree.io/f/xqeedngz";
-
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: 'barrientos',
@@ -202,7 +200,7 @@ export const TESTIMONIALS: Testimonial[] = [
     clinicName: 'Clínica Dentalife. Dra. Marisol',
     headline: '+ 14 primeras visitas en 2 semanas',
     quote: "14 primeras visitas en 2 semanas con Omni Dental. 2 pacientes cerrados con una facturación de 22.000€.",
-    videoUrl: "https://omnidental.es/wp-content/uploads/2025/01/marisol-1.jpg", // Using image as placeholder if video missing or extracted
+    videoUrl: "https://omnidental.es/wp-content/uploads/2025/01/marisol-1.jpg", 
     result: "+22.000€ facturación",
     treatment: "Implantes",
     date: "06/2020",

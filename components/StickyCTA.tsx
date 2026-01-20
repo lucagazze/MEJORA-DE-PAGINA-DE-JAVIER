@@ -24,13 +24,31 @@ const StickyCTA = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden animate-fade-in-up">
+    <div style={{
+      position: 'fixed',
+      bottom: '1rem',
+      left: '1rem',
+      right: '1rem',
+      zIndex: 100,
+      animation: 'fadeInUp 0.5s ease-out'
+    }}>
       <button
         onClick={scrollToForm}
-        className="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-2xl flex items-center justify-center gap-2"
+        className="btn-primary"
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.5rem',
+          padding: '1rem',
+          borderRadius: '1rem',
+          fontSize: '1rem',
+          boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
+        }}
       >
         Sí, Necesito Nuevos Pacientes
-        <ArrowUpRight className="w-5 h-5" />
+        <ArrowUpRight size={20} />
       </button>
     </div>
   );
