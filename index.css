@@ -56,7 +56,7 @@ button {
   background: none;
 }
 
-img, video {
+img, video, iframe {
   max-width: 100%;
   height: auto;
   display: block;
@@ -171,6 +171,7 @@ img, video {
   border-radius: 50%;
   filter: blur(100px);
   opacity: 0.15;
+  will-change: transform; /* Performance optimization */
 }
 
 .blob-1 {
@@ -525,10 +526,14 @@ img, video {
   margin-bottom: 1.25rem;
 }
 
-.video-wrapper iframe, .video-wrapper video, .video-wrapper img {
+/* Ensure inner video elements cover the wrapper */
+.video-wrapper iframe, 
+.video-wrapper video, 
+.video-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .card-header {
@@ -938,6 +943,7 @@ img, video {
   right: 1rem;
   z-index: 100;
   animation: fadeInUp 0.5s ease-out;
+  will-change: transform, opacity; /* Performance optimization */
 }
 
 .sticky-cta-btn {
@@ -968,6 +974,7 @@ img, video {
 
 .animate-fade-in-up {
   animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
 }
 
 /* Utilities */

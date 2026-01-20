@@ -6,18 +6,21 @@ import BenefitsSection from './components/BenefitsSection';
 import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 import StickyCTA from './components/StickyCTA';
+import { VideoProvider } from './context/VideoContext';
 
 function App() {
   return (
-    <main className="min-h-screen font-sans bg-white selection:bg-primary selection:text-white">
-      <Hero />
-      <Intro />
-      <TestimonialsSection />
-      <BenefitsSection />
-      <ContactForm />
-      <Footer />
-      <StickyCTA />
-    </main>
+    <VideoProvider>
+      <main className="min-h-screen font-sans bg-white selection:bg-primary selection:text-white">
+        <Hero />
+        <Intro />
+        <TestimonialsSection />
+        <BenefitsSection />
+        <ContactForm />
+        <Footer />
+        <StickyCTA />
+      </main>
+    </VideoProvider>
   );
 }
 

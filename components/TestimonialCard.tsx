@@ -10,8 +10,12 @@ interface Props {
 const TestimonialCard: React.FC<Props> = ({ data }) => {
   return (
     <div className="testimonial-card">
+      {/* 
+        The video wrapper forces the aspect ratio.
+        The VideoPlayer inside uses width: 100% height: 100% and object-fit: cover 
+      */}
       <div className="video-wrapper">
-         <VideoPlayer url={data.videoUrl} />
+         <VideoPlayer url={data.videoUrl} id={data.id} />
       </div>
 
       <div style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
@@ -21,7 +25,7 @@ const TestimonialCard: React.FC<Props> = ({ data }) => {
               <p style={{fontSize: '0.9rem', color: 'var(--slate-500)'}}>{data.treatment}</p>
            </div>
            {data.logoUrl && (
-             <img src={data.logoUrl} alt="logo" className="clinic-logo" />
+             <img src={data.logoUrl} alt="logo" className="clinic-logo" loading="lazy" />
            )}
         </div>
 

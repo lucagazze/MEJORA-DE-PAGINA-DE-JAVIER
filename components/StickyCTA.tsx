@@ -5,16 +5,23 @@ const StickyCTA = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 500) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
+    // Optimization: Use IntersectionObserver on the Hero section instead of scroll listener
+    // When Hero is OUT of view, show the Sticky CTA.
+    const heroElement = document.querySelector('.hero');
+    
+    if (!heroElement) return;
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // If hero is NOT intersecting (user scrolled past it), show CTA
+        setIsVisible(!entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(heroElement);
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollToForm = () => {
