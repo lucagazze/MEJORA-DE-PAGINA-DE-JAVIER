@@ -12,21 +12,31 @@ const ContactForm = () => {
     setError(null);
 
     const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    const payload = {
+      ...data,
+      access_key: '392a0797-bcaa-4eb1-8b30-1b03db06d3ec',
+      subject: 'Nueva solicitud desde Omnidental Web',
+      from_name: 'Omnidental Landing',
+    };
 
     try {
-      const response = await fetch('https://formspree.io/f/xqeedngz', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: formData,
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json'
-        }
+        },
+        body: JSON.stringify(payload)
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (result.success) {
         setIsSuccess(true);
       } else {
-        const data = await response.json();
-        setError(data.error || 'Hubo un error al enviar el formulario.');
+        setError(result.message || 'Hubo un error al enviar el formulario.');
       }
     } catch (err) {
       setError('Error de conexión. Por favor intenta de nuevo.');
@@ -65,7 +75,7 @@ const ContactForm = () => {
       <div className="container">
         <div className="text-center mb-8">
           <h2 className="text-white" style={{fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem'}}>¿Tu clínica califica?</h2>
-          <p className="text-blue-200" style={{fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto', lineHeight: 1.5}}>
+          <p className="text-blue-200" style={{fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto'}}>
             Trabajamos con exclusividad de zona. Completa el formulario para verificar si tu ubicación está disponible.
           </p>
         </div>
@@ -73,6 +83,8 @@ const ContactForm = () => {
         <div className="form-card">
           <form onSubmit={handleSubmit}>
             
+            <input type="checkbox" name="botcheck" className="hidden-mobile" style={{display: 'none'}} />
+
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Nombre</label>
@@ -106,8 +118,8 @@ const ContactForm = () => {
               </div>
             </div>
 
-            <div style={{background: 'var(--slate-50)', padding: '1.25rem', borderRadius: '1rem', marginBottom: '2rem', border: '1px solid var(--slate-100)'}}>
-              <label style={{display: 'block', fontWeight: 700, marginBottom: '1rem', fontSize: '0.9rem'}}>
+            <div style={{background: 'var(--slate-50)', padding: '1.5rem', borderRadius: '1rem', marginBottom: '2rem', border: '1px solid var(--slate-100)'}}>
+              <label style={{display: 'block', fontWeight: 700, marginBottom: '1rem'}}>
                 ¿Eres el propietario/a de la clínica?
               </label>
               <div className="radio-group">
@@ -136,11 +148,11 @@ const ContactForm = () => {
                     className="btn-submit"
                 >
                     {isSubmitting ? 'Verificando...' : 'Verificar Disponibilidad'}
-                    {!isSubmitting && <Send size={20} />}
+                    {!isSubmitting && <Send size={24} />}
                 </button>
                 
-                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem', fontSize: '0.8rem', color: 'var(--slate-400)'}}>
-                    <Lock size={14} />
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--slate-400)'}}>
+                    <Lock size={16} />
                     <span>Tus datos están protegidos por SSL.</span>
                 </div>
             </div>

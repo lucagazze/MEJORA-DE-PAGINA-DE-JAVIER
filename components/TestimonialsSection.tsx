@@ -9,13 +9,13 @@ const TestimonialsSection = () => {
       <div className="container">
         <div className="section-header">
           <div className="label">
-            Casos de Éxito Reales
+            Resultados Comprobados
           </div>
           <h2 className="section-title">
-            Resultados que hablan por sí solos
+            Lo que dicen nuestros doctores
           </h2>
           <p className="section-desc">
-            No te fíes de nuestra palabra. Mira lo que dicen los doctores que ya han duplicado su facturación con nuestro sistema de implantes.
+            Hemos ayudado a más de 150 clínicas a duplicar su facturación de implantes. Aquí tienes algunos ejemplos reales.
           </p>
         </div>
 
@@ -25,7 +25,7 @@ const TestimonialsSection = () => {
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center">
            <button
             onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn btn-dark"

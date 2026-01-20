@@ -3,17 +3,7 @@ import { ArrowRight, PlayCircle } from 'lucide-react';
 
 const Hero = () => {
   const scrollToForm = () => {
-    const formElement = document.getElementById('contact-form');
-    if (formElement) {
-      formElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToTestimonials = () => {
-    const testimonialsElement = document.getElementById('testimonials');
-    if (testimonialsElement) {
-      testimonialsElement.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -51,7 +41,7 @@ const Hero = () => {
             <ArrowRight size={20} />
           </button>
           <button
-            onClick={scrollToTestimonials}
+            onClick={() => document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn btn-secondary"
           >
             <PlayCircle size={20} />

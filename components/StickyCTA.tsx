@@ -6,7 +6,6 @@ const StickyCTA = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show button after scrolling down 500px
       if (window.scrollY > 500) {
         setIsVisible(true);
       } else {
@@ -22,11 +21,13 @@ const StickyCTA = () => {
     document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  if (!isVisible) return null;
+
   return (
-    <div className={`sticky-cta-wrapper ${isVisible ? 'visible' : ''}`}>
+    <div className="sticky-cta-wrapper">
       <button
         onClick={scrollToForm}
-        className="sticky-cta-btn"
+        className="btn-primary sticky-cta-btn"
       >
         Sí, Necesito Nuevos Pacientes
         <ArrowUpRight size={20} />

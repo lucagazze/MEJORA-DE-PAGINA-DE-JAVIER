@@ -32,16 +32,6 @@ export const TESTIMONIALS: Testimonial[] = [
     date: "01/2025",
   },
   {
-    id: 'santrafaell',
-    clinicName: 'Clínica Sant Rafaell',
-    headline: 'El cambio ha sido Importante, Es estupendo',
-    quote: "Estoy muy contenta con el servicio de Omni. Creo que todo el equipo hace un trabajo extraordinario. Están pendientes de que todo esté funcionando bien.",
-    videoUrl: "https://omnidental.es/wp-content/uploads/2025/10/testimonio.mp4",
-    result: "4X facturación en tres meses",
-    treatment: "Implantes",
-    date: "01/2025",
-  },
-  {
     id: 'ivoria',
     clinicName: 'Clínica Ivoria',
     headline: '+ 31.000 euros en 45 días',
@@ -204,6 +194,17 @@ export const TESTIMONIALS: Testimonial[] = [
     result: "+42 primeras visitas",
     treatment: "Implantes",
     date: "06/2020"
+  },
+  {
+    id: 'marisol',
+    clinicName: 'Clínica Dentalife. Dra. Marisol',
+    headline: '+ 14 primeras visitas en 2 semanas',
+    quote: "14 primeras visitas en 2 semanas con Omni Dental. 2 pacientes cerrados con una facturación de 22.000€.",
+    videoUrl: "https://omnidental.es/wp-content/uploads/2025/01/marisol-1.jpg", 
+    result: "+22.000€ facturación",
+    treatment: "Implantes",
+    date: "06/2020",
+    photoUrl: "https://omnidental.es/wp-content/uploads/2025/01/marisol-1.jpg"
   }
 ];
 
