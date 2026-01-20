@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useVideoContext } from '../context/VideoContext';
-import { Play, Volume2, VolumeX, Pause } from 'lucide-react';
+import { Play } from 'lucide-react';
 
 interface VideoPlayerProps {
   url: string;
@@ -9,92 +9,16 @@ interface VideoPlayerProps {
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id, poster }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
   const { playingId, setPlayingId } = useVideoContext();
   
-  const [isMuted, setIsMuted] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
+  // Is this specific video currently active?
   const isPlaying = playingId === id;
 
   const isVimeo = url.includes('vimeo');
   const isImage = url.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null;
 
-  // Helper to send commands to Vimeo iframe
-  const postToVimeo = (method: string, value?: string) => {
-    if (iframeRef.current && iframeRef.current.contentWindow) {
-      const message = { method, value };
-      iframeRef.current.contentWindow.postMessage(JSON.stringify(message), '*');
-    }
-  };
-
-  // Intersection Observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setPlayingId(id);
-          setIsLoaded(true);
-        } else {
-          if (playingId === id) {
-            setPlayingId(null);
-          }
-        }
-      },
-      { threshold: 0.65 }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [id, playingId, setPlayingId]);
-
-  // Effect to handle Play/Pause
-  useEffect(() => {
-    if (isImage) return;
-
-    if (isPlaying) {
-      if (isVimeo) {
-        postToVimeo('play');
-        postToVimeo('setVolume', isMuted ? '0' : '1');
-      } else if (videoRef.current) {
-        videoRef.current.muted = isMuted;
-        const playPromise = videoRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            if(videoRef.current) videoRef.current.muted = true;
-          });
-        }
-      }
-    } else {
-      if (isVimeo) {
-        postToVimeo('pause');
-      } else if (videoRef.current) {
-        videoRef.current.pause();
-      }
-    }
-  }, [isPlaying, isVimeo, isMuted, isImage]);
-
-  const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsMuted(!isMuted);
-    if (isVimeo) {
-      postToVimeo('setVolume', !isMuted ? '0' : '1');
-    } else if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-    }
-  };
-
-  const handleContainerClick = () => {
-    if (isPlaying) {
-      setPlayingId(null);
-    } else {
-      setPlayingId(id);
-      setIsMuted(false);
-    }
+  const handlePlay = () => {
+    setPlayingId(id);
   };
 
   const getVimeoUrl = (src: string) => {
@@ -105,106 +29,89 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id, poster }) => {
     } else {
       videoId = src.split('/').pop() || '';
     }
-    return `https://player.vimeo.com/video/${videoId}?api=1&title=0&byline=0&portrait=0&dnt=1&autopause=0&background=1`;
+    // params: 
+    // autoplay=1 -> Start immediately when loaded (since user clicked play)
+    // muted=0 -> Audio ON
+    // controls=1 -> Show native controls
+    // dnt=1 -> Do not track (privacy)
+    return `https://player.vimeo.com/video/${videoId}?api=1&autoplay=1&muted=0&controls=1&title=0&byline=0&portrait=0&dnt=1`;
   };
 
+  // Case: Static Image (Screenshots of results, etc.)
   if (isImage) {
       return (
         <div className="relative w-full h-full bg-slate-100 rounded-lg overflow-hidden shadow-lg border border-slate-200">
-            <img src={url} alt="Testimonio" className="w-full h-full object-cover" loading="lazy" />
+            <img 
+              src={url} 
+              alt="Resultado" 
+              className="w-full h-full object-cover" 
+              loading="lazy"
+              decoding="async" 
+            />
         </div>
       )
   }
 
   return (
     <div 
-      ref={containerRef}
-      className="relative w-full h-full bg-slate-900 rounded-lg overflow-hidden shadow-lg border border-slate-200 group cursor-pointer"
-      onClick={handleContainerClick}
+      className="relative w-full h-full bg-slate-900 rounded-lg overflow-hidden shadow-lg border border-slate-200 group"
       style={{ aspectRatio: '16/9', isolation: 'isolate' }}
     >
-      {/* Vimeo Implementation */}
-      {isVimeo && (
-        <>
-          {/* Poster Layer */}
-          {poster && (
+      {isPlaying ? (
+        /* ACTIVE STATE: Show Video/Iframe with Controls */
+        isVimeo ? (
+          <iframe
+            src={getVimeoUrl(url)}
+            className="absolute inset-0 w-full h-full z-10"
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+            title="Testimonio"
+          ></iframe>
+        ) : (
+          <video
+            src={url}
+            className="absolute inset-0 w-full h-full object-cover z-10"
+            controls
+            autoPlay
+            playsInline
+            // No 'muted' attribute ensures sound is ON
+          ></video>
+        )
+      ) : (
+        /* IDLE STATE: Show Poster + Play Button */
+        <div 
+          className="absolute inset-0 w-full h-full cursor-pointer z-20"
+          onClick={handlePlay}
+        >
+          {poster ? (
             <img 
               src={poster} 
-              alt="Cover"
-              className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-105"
+              alt="Ver testimonio"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               loading="lazy"
+              decoding="async"
             />
-          )}
-
-          {/* Iframe Layer */}
-          {isLoaded ? (
-            <iframe
-              ref={iframeRef}
-              src={getVimeoUrl(url)}
-              className="absolute inset-0 w-full h-full z-10"
-              frameBorder="0"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-              title="Testimonio"
-              style={{ pointerEvents: 'none' }}
-              onLoad={() => {
-                if (isPlaying) postToVimeo('play');
-              }}
-            ></iframe>
           ) : (
-             !poster && (
-                <div className="absolute inset-0 flex items-center justify-center bg-slate-900 z-0">
-                  <div className="w-10 h-10 border-4 border-slate-700 border-t-primary rounded-full animate-spin"></div>
-                </div>
-             )
+             // Fallback gradient if no poster
+             <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900"></div>
           )}
-        </>
-      )}
 
-      {/* HTML5 Implementation */}
-      {!isVimeo && (
-        <video
-          ref={videoRef}
-          src={url}
-          poster={poster}
-          className="absolute inset-0 w-full h-full object-cover z-10"
-          playsInline
-          loop
-          muted={isMuted}
-          preload="metadata"
-        ></video>
-      )}
+          {/* Dark overlay for better text/icon contrast */}
+          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300"></div>
 
-      {/* Overlay Play/Pause Button */}
-      <div className={`absolute inset-0 bg-black/10 z-20 transition-all duration-300 flex items-center justify-center ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
-        <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm transform transition-transform group-hover:scale-110">
-           {isPlaying ? (
-             <Pause size={28} className="text-slate-900" fill="currentColor" />
-           ) : (
-             <Play size={28} className="text-primary ml-1" fill="currentColor" />
-           )}
-        </div>
-      </div>
-
-      {/* Audio Controls (Professional Look) */}
-      {isPlaying && (
-        <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2 animate-fade-in-up" style={{animationDuration: '0.3s'}}>
-          <button 
-            onClick={toggleMute}
-            className="flex items-center gap-2 px-3 py-1.5 bg-black/60 text-white rounded-full backdrop-blur-md hover:bg-black/80 transition-colors border border-white/10"
-          >
-            {isMuted ? (
-              <>
-                <VolumeX size={18} />
-                <span className="text-xs font-bold uppercase tracking-wide">Activar Sonido</span>
-              </>
-            ) : (
-              <>
-                 <Volume2 size={18} />
-                 <span className="text-xs font-bold uppercase tracking-wide">Silenciar</span>
-              </>
-            )}
-          </button>
+          {/* Play Button Wrapper */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(0,0,0,0.3)] backdrop-blur-sm transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white">
+               <Play size={32} className="text-primary ml-1" fill="currentColor" />
+            </div>
+          </div>
+          
+          <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
+             <span className="inline-block px-3 py-1 bg-black/60 text-white text-xs font-bold uppercase tracking-wider rounded-full backdrop-blur-md">
+                Ver Video
+             </span>
+          </div>
         </div>
       )}
     </div>

@@ -2,24 +2,42 @@ import React, { useState, useEffect } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
 const StickyCTA = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Optimization: Use IntersectionObserver on the Hero section instead of scroll listener
-    // When Hero is OUT of view, show the Sticky CTA.
-    const heroElement = document.querySelector('.hero');
+    const hero = document.querySelector('.hero');
+    const form = document.getElementById('contact-form');
     
-    if (!heroElement) return;
+    // We need to track visibility of both sections
+    let isHeroVisible = true;
+    let isFormVisible = false;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        // If hero is NOT intersecting (user scrolled past it), show CTA
-        setIsVisible(!entry.isIntersecting);
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === hero) {
+            isHeroVisible = entry.isIntersecting;
+          }
+          if (entry.target === form) {
+            isFormVisible = entry.isIntersecting;
+          }
+        });
+
+        // Show CTA only if we are NOT in Hero AND NOT in Form
+        if (!isHeroVisible && !isFormVisible) {
+          setShow(true);
+        } else {
+          setShow(false);
+        }
       },
-      { threshold: 0 }
+      { 
+        threshold: 0,
+        rootMargin: "0px 0px -100px 0px" // Adjust margin to trigger slightly before/after
+      }
     );
 
-    observer.observe(heroElement);
+    if (hero) observer.observe(hero);
+    if (form) observer.observe(form);
 
     return () => observer.disconnect();
   }, []);
@@ -28,19 +46,15 @@ const StickyCTA = () => {
     document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  if (!isVisible) return null;
-
   return (
-    <div className="sticky-cta-wrapper">
-      <div className="sticky-cta-container">
-        <button
-          onClick={scrollToForm}
-          className="sticky-cta-btn"
-        >
-          Sí, Necesito Nuevos Pacientes
-          <ArrowUpRight size={22} strokeWidth={2.5} />
-        </button>
-      </div>
+    <div className={`sticky-cta-wrapper ${show ? 'visible' : ''}`}>
+      <button
+        onClick={scrollToForm}
+        className="sticky-cta-btn"
+      >
+        Sí, Necesito Nuevos Pacientes
+        <ArrowUpRight size={22} strokeWidth={2.5} />
+      </button>
     </div>
   );
 };
