@@ -23,8 +23,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, poster }) => {
     } else {
       videoId = src.split('/').pop() || '';
     }
-    // Autoplay=1 is crucial here because the user has already clicked our fake play button
-    return `https://player.vimeo.com/video/${videoId}?api=1&autoplay=1&muted=0&controls=1&title=0&byline=0&portrait=0&dnt=1`;
+    // Updated parameters to match source: title=1, portrait=1, byline=1
+    // AutoPlay=1 is kept because the user has already clicked our custom play button
+    return `https://player.vimeo.com/video/${videoId}?api=1&autoplay=1&muted=0&color=0066FF&title=1&byline=1&portrait=1`;
   };
 
   if (isImage) {
@@ -57,6 +58,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, poster }) => {
               className="w-full h-full object-cover"
               controls
               autoPlay
+              controlsList="nodownload"
             ></video>
           )}
         </div>
