@@ -32,13 +32,15 @@ const StickyCTA = () => {
 
   return (
     <div className="sticky-cta-wrapper">
-      <button
-        onClick={scrollToForm}
-        className="btn-primary sticky-cta-btn"
-      >
-        Sí, Necesito Nuevos Pacientes
-        <ArrowUpRight size={20} />
-      </button>
+      <div className="sticky-cta-container">
+        <button
+          onClick={scrollToForm}
+          className="sticky-cta-btn"
+        >
+          Sí, Necesito Nuevos Pacientes
+          <ArrowUpRight size={22} strokeWidth={2.5} />
+        </button>
+      </div>
     </div>
   );
 };

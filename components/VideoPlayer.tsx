@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useVideoContext } from '../context/VideoContext';
-import { Play, Volume2, VolumeX } from 'lucide-react';
+import { Play, Volume2, VolumeX, Pause } from 'lucide-react';
 
 interface VideoPlayerProps {
   url: string;
@@ -126,7 +126,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id, poster }) => {
       {/* Vimeo Implementation */}
       {isVimeo && (
         <>
-          {/* Poster Layer (Behind iframe, visible until iframe loads opaque) */}
+          {/* Poster Layer */}
           {poster && (
             <img 
               src={poster} 
@@ -148,12 +148,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id, poster }) => {
               title="Testimonio"
               style={{ pointerEvents: 'none' }}
               onLoad={() => {
-                // Ensure we trigger play once iframe is ready if logic demands it
                 if (isPlaying) postToVimeo('play');
               }}
             ></iframe>
           ) : (
-             // Spinner only if no poster is available
              !poster && (
                 <div className="absolute inset-0 flex items-center justify-center bg-slate-900 z-0">
                   <div className="w-10 h-10 border-4 border-slate-700 border-t-primary rounded-full animate-spin"></div>
@@ -177,23 +175,37 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url, id, poster }) => {
         ></video>
       )}
 
-      {/* Overlay Play Button */}
-      <div className={`absolute inset-0 bg-black/10 z-20 transition-opacity duration-300 flex items-center justify-center ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
-        {!isPlaying && (
-           <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm transform transition-transform group-hover:scale-110">
-              <Play size={24} className="text-primary ml-1" fill="currentColor" />
-           </div>
-        )}
+      {/* Overlay Play/Pause Button */}
+      <div className={`absolute inset-0 bg-black/10 z-20 transition-all duration-300 flex items-center justify-center ${isPlaying ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+        <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm transform transition-transform group-hover:scale-110">
+           {isPlaying ? (
+             <Pause size={28} className="text-slate-900" fill="currentColor" />
+           ) : (
+             <Play size={28} className="text-primary ml-1" fill="currentColor" />
+           )}
+        </div>
       </div>
 
-      {/* Mute Toggle */}
+      {/* Audio Controls (Professional Look) */}
       {isPlaying && (
-        <button 
-          onClick={toggleMute}
-          className="absolute bottom-4 right-4 p-2 bg-black/50 text-white rounded-full backdrop-blur-md hover:bg-black/70 transition-colors z-30"
-        >
-          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        </button>
+        <div className="absolute bottom-4 right-4 z-30 flex items-center gap-2 animate-fade-in-up" style={{animationDuration: '0.3s'}}>
+          <button 
+            onClick={toggleMute}
+            className="flex items-center gap-2 px-3 py-1.5 bg-black/60 text-white rounded-full backdrop-blur-md hover:bg-black/80 transition-colors border border-white/10"
+          >
+            {isMuted ? (
+              <>
+                <VolumeX size={18} />
+                <span className="text-xs font-bold uppercase tracking-wide">Activar Sonido</span>
+              </>
+            ) : (
+              <>
+                 <Volume2 size={18} />
+                 <span className="text-xs font-bold uppercase tracking-wide">Silenciar</span>
+              </>
+            )}
+          </button>
+        </div>
       )}
     </div>
   );

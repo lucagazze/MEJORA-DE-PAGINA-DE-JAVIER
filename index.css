@@ -27,6 +27,7 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   --shadow-glow: 0 0 40px -10px rgba(0, 102, 255, 0.3);
 }
 
@@ -88,7 +89,6 @@ img, video, iframe {
 
 .section {
   padding: 3.5rem 0;
-  /* Performance optimization: prevents rendering off-screen content */
   content-visibility: auto; 
   contain-intrinsic-size: 800px; 
 }
@@ -185,7 +185,7 @@ img, video, iframe {
 
 @media (min-width: 768px) {
   .hero {
-    padding: 7rem 0; /* More generous spacing on desktop */
+    padding: 7rem 0;
   }
 }
 
@@ -262,7 +262,7 @@ img, video, iframe {
   font-weight: 800;
   margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
-  text-wrap: balance; /* Modern CSS for balanced headings */
+  text-wrap: balance;
 }
 
 @media (min-width: 768px) {
@@ -275,7 +275,7 @@ img, video, iframe {
 
 @media (min-width: 1024px) {
   .hero-title {
-    font-size: 5rem; /* Massive impact on large screens */
+    font-size: 5rem;
   }
 }
 
@@ -483,7 +483,7 @@ img, video, iframe {
   text-underline-offset: 4px;
 }
 
-/* Testimonials */
+/* Testimonials - SINGLE COLUMN LAYOUT */
 .testimonials {
   padding: 4rem 0;
 }
@@ -540,18 +540,20 @@ img, video, iframe {
   }
 }
 
+/* Updated for Single Column Desktop */
 .testimonials-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1fr; /* Force 1 column on all sizes */
+  gap: 3rem;
+  margin-bottom: 4rem;
+  max-width: 800px; /* Constrain width on large screens so it looks focused */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (min-width: 900px) {
   .testimonials-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3rem;
-    margin-bottom: 5rem;
+    gap: 5rem; /* More space between stories on desktop */
   }
 }
 
@@ -568,11 +570,12 @@ img, video, iframe {
 
 @media (min-width: 768px) {
   .testimonial-card {
-    padding: 1.5rem;
+    padding: 2rem;
+    border-radius: 2rem;
   }
   .testimonial-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-2xl);
     border-color: var(--slate-200);
   }
 }
@@ -584,9 +587,9 @@ img, video, iframe {
   background-color: var(--slate-900);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  margin-bottom: 1.25rem;
-  /* Prevent bleed during border radius */
+  margin-bottom: 1.5rem;
   isolation: isolate; 
+  box-shadow: var(--shadow-md);
 }
 
 .video-wrapper iframe, 
@@ -601,11 +604,11 @@ img, video, iframe {
 .card-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .clinic-logo {
-  height: 1.75rem;
+  height: 2rem;
   opacity: 0.6;
   filter: grayscale(100%);
   transition: 0.3s;
@@ -618,24 +621,24 @@ img, video, iframe {
 
 .quote-box {
   position: relative;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .quote-icon {
   color: var(--slate-100);
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
   position: absolute;
-  top: -8px;
-  left: -8px;
+  top: -10px;
+  left: -10px;
   z-index: 0;
 }
 
 .headline {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: var(--primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   position: relative;
   z-index: 1;
 }
@@ -643,15 +646,15 @@ img, video, iframe {
 .quote-text {
   font-style: italic;
   color: var(--slate-600);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
   position: relative;
   z-index: 1;
 }
 
 .card-footer {
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 1.25rem;
   border-top: 1px solid var(--slate-100);
   display: flex;
   justify-content: space-between;
@@ -667,16 +670,15 @@ img, video, iframe {
   gap: 0.4rem;
   color: var(--green-500);
   background-color: var(--green-50);
-  padding: 0.25rem 0.6rem;
+  padding: 0.35rem 0.75rem;
   border-radius: var(--radius-full);
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
 }
 
 @media (min-width: 640px) {
   .result-badge {
-    font-size: 0.875rem;
-    padding: 0.25rem 0.75rem;
+    font-size: 0.95rem;
   }
 }
 
@@ -687,7 +689,7 @@ img, video, iframe {
 
 .benefits-compare {
   display: grid;
-  gap: 1.5rem;
+  gap: 2rem;
   max-width: 1100px;
   margin: 0 auto 4rem;
 }
@@ -695,27 +697,27 @@ img, video, iframe {
 @media (min-width: 900px) {
   .benefits-compare {
     grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    gap: 4rem;
     margin: 0 auto 6rem;
   }
 }
 
 .card-pain {
   background: var(--white);
-  padding: 1.75rem;
+  padding: 2rem;
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-  border-left: 4px solid var(--red-500);
+  box-shadow: var(--shadow-lg);
+  border-left: 6px solid var(--red-500);
   transition: 0.3s;
 }
 
 .card-gain {
   background: var(--slate-900);
   color: var(--white);
-  padding: 1.75rem;
+  padding: 2rem;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
-  border-left: 4px solid var(--green-500);
+  border-left: 6px solid var(--green-500);
   position: relative;
   overflow: hidden;
   transition: 0.3s;
@@ -723,36 +725,27 @@ img, video, iframe {
 
 @media (min-width: 768px) {
   .card-pain, .card-gain {
-    padding: 2.5rem;
-  }
-  .card-pain:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-  }
-  .card-gain:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.2);
+    padding: 3rem;
   }
 }
 
 .list-item {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  font-size: 1.05rem;
 }
 
 @media (min-width: 768px) {
   .list-item {
-    font-size: 1.125rem;
-    gap: 1rem;
+    font-size: 1.15rem;
   }
 }
 
 .icon-box {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -760,11 +753,11 @@ img, video, iframe {
   flex-shrink: 0;
   margin-top: 0.1rem;
   font-weight: bold;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .card-pain .icon-box {
-  border: 1px solid var(--red-500);
+  background: var(--red-50);
   color: var(--red-500);
 }
 
@@ -773,6 +766,7 @@ img, video, iframe {
   color: var(--slate-900);
 }
 
+/* Services */
 .services-grid {
   display: grid;
   gap: 0.75rem;
@@ -790,7 +784,7 @@ img, video, iframe {
 
 @media (min-width: 1024px) {
   .services-grid {
-    grid-template-columns: repeat(3, 1fr); /* 3 cols on desktop for better use of space */
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
 }
@@ -1024,52 +1018,83 @@ img, video, iframe {
   color: var(--primary);
 }
 
-/* Sticky CTA */
+/* PREMIUM STICKY CTA */
 .sticky-cta-wrapper {
   position: fixed;
-  bottom: 1.25rem;
-  left: 1rem;
-  right: 1rem;
+  bottom: 2rem;
+  left: 0;
+  right: 0;
   z-index: 100;
-  animation: fadeInUp 0.5s ease-out;
+  animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: transform, opacity;
   display: flex;
   justify-content: center;
+  pointer-events: none; /* Let clicks pass through outside the button */
+}
+
+.sticky-cta-container {
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0.5rem;
+  border-radius: 9999px;
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+    0 10px 10px -5px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  display: flex;
+  align-items: center;
+  transform: translateY(0);
+  transition: transform 0.2s ease;
+}
+
+.sticky-cta-container:hover {
+  transform: translateY(-2px);
 }
 
 .sticky-cta-btn {
-  width: 100%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-radius: 1rem;
+  gap: 0.75rem;
+  padding: 0.875rem 2rem;
+  border-radius: 9999px;
   font-size: 1rem;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+  font-weight: 800;
+  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
   white-space: nowrap;
-  backdrop-filter: blur(10px);
+  letter-spacing: -0.01em;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sticky-cta-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(rgba(255,255,255,0.2), transparent);
+  pointer-events: none;
+}
+
+.sticky-cta-btn:hover {
+  box-shadow: 0 8px 25px rgba(0, 102, 255, 0.5);
+  filter: brightness(1.1);
 }
 
 @media (min-width: 768px) {
   .sticky-cta-wrapper {
-    bottom: 2rem;
-    width: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    right: auto;
+    bottom: 3rem;
   }
   .sticky-cta-btn {
-    width: auto;
     padding: 1rem 3rem;
-  }
-  /* Fix transform conflict with animation */
-  @keyframes fadeInUpDesktop {
-    from { opacity: 0; transform: translate(-50%, 20px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
-  }
-  .sticky-cta-wrapper {
-    animation: fadeInUpDesktop 0.5s ease-out forwards;
+    font-size: 1.125rem;
   }
 }
 
@@ -1077,7 +1102,7 @@ img, video, iframe {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
