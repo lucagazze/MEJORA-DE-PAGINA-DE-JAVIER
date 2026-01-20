@@ -1,8 +1,7 @@
 import React from 'react';
 import { Testimonial } from '../types';
 import VideoPlayer from './VideoPlayer';
-import { TrendingUp, Calendar, Quote, Activity } from 'lucide-react';
-import { IMAGES } from '../constants';
+import { TrendingUp } from 'lucide-react';
 
 interface Props {
   data: Testimonial;
@@ -10,59 +9,53 @@ interface Props {
 
 const TestimonialCard: React.FC<Props> = ({ data }) => {
   return (
-    <div className="testimonial-card">
-      
-      {/* 1. TOP SECTION: Headline & Quote */}
-      <div className="card-top">
-         <div className="quote-box">
-            <Quote className="quote-icon" />
-            <h4 className="headline">
-               <span style={{color: 'var(--slate-400)', marginRight: '6px', fontSize: '0.8em'}}>«</span>
-               {data.headline}
-            </h4>
-            <p className="quote-text">
-               {data.quote}
-               <span style={{color: 'var(--slate-400)', marginLeft: '6px'}}>»</span>
-            </p>
-         </div>
-      </div>
-
-      {/* 2. BODY: Video + Info Grid */}
-      <div className="testimonial-body">
-         <div className="video-wrapper">
-            {/* Removed the 'poster' prop so VideoPlayer handles the thumbnail logic internally */}
-            <VideoPlayer url={data.videoUrl} />
+    <div className="testimonial-card-new">
+      <div className="t-card-content">
+         
+         {/* VIDEO SIDE (Left) */}
+         <div className="t-video-wrapper">
+            <VideoPlayer url={data.videoUrl} poster={data.photoUrl} />
          </div>
 
-         <div className="card-info-col">
-            <h3 style={{fontSize: '1.2rem', fontWeight: 800, color: 'var(--slate-900)'}}>{data.clinicName}</h3>
+         {/* INFO SIDE (Right) */}
+         <div className="t-info-wrapper">
             
-            <div className="info-list">
-               <div className="info-item">
-                  <div className="info-icon"><TrendingUp size={14} /></div>
-                  <div>
-                     <strong>Resultado:</strong> {data.result}
-                  </div>
-               </div>
-               <div className="info-item">
-                  <div className="info-icon"><Activity size={14} /></div>
-                  <div>
-                     <strong>Tratamiento:</strong> {data.treatment}
-                  </div>
-               </div>
-               <div className="info-item">
-                  <div className="info-icon"><Calendar size={14} /></div>
-                  <div>
-                     <strong>Fecha:</strong> {data.date}
-                  </div>
-               </div>
+            {/* Green Badge (Reference Image Style) */}
+            <div className="t-result-badge">
+               <TrendingUp size={14} className="mr-1.5" />
+               {data.result}
             </div>
 
-            {data.logoUrl && (
-              <div style={{marginTop: 'auto', paddingTop: '1.5rem'}}>
-                 <img src={data.logoUrl} alt={data.clinicName} className="clinic-logo" />
-              </div>
-            )}
+            {/* Quote */}
+            <blockquote className="t-quote">
+               "{data.quote}"
+            </blockquote>
+
+            {/* Divider */}
+            <div className="t-divider"></div>
+
+            {/* Simple Footer */}
+            <div className="flex items-center gap-4">
+                 {/* Clinic Initial/Logo */}
+                 <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 flex-shrink-0 text-lg font-bold text-slate-700">
+                    {data.logoUrl ? (
+                         <img src={data.logoUrl} alt="" className="w-full h-full object-contain p-1 opacity-90" />
+                    ) : (
+                         data.clinicName.charAt(0)
+                    )}
+                 </div>
+
+                 {/* Text Info */}
+                 <div className="flex flex-col">
+                     <h4 className="text-sm font-bold text-slate-900 leading-tight">
+                        {data.clinicName}
+                     </h4>
+                     <p className="text-xs text-slate-500 mt-0.5">
+                        {data.treatment} • {data.date}
+                     </p>
+                 </div>
+            </div>
+
          </div>
       </div>
     </div>
