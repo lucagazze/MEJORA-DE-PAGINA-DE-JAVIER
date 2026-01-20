@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Star, ShieldCheck, PlayCircle } from 'lucide-react';
+import { ArrowRight, PlayCircle } from 'lucide-react';
 
 const Hero = () => {
   const scrollToForm = () => {
@@ -47,20 +47,6 @@ const Hero = () => {
             <PlayCircle size={20} />
             Ver Resultados
           </button>
-        </div>
-
-        <div className="features-grid animate-fade-in-up" style={{animationDelay: '0.4s'}}>
-           {[
-             { icon: ShieldCheck, text: "Garantía Contrato", color: "#22c55e" },
-             { icon: Star, text: "Exclusividad Zona", color: "#eab308" },
-             { icon: ShieldCheck, text: "Sin Permanencia", color: "#0066FF" },
-             { icon: Star, text: "Soporte 24/7", color: "#9333ea" }
-           ].map((item, i) => (
-             <div key={i} className="feature-item">
-                <item.icon size={24} style={{color: item.color}} />
-                <span>{item.text}</span>
-             </div>
-           ))}
         </div>
       </div>
     </div>
